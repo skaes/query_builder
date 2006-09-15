@@ -1,0 +1,34 @@
+query_builder
+=============
+
+This plugin enables you to define finder methods that bypass the overhead
+of construct_finder_sql.
+
+  define_finder query_name, query_type, options_hash
+
+creates a SQL query +query_name+ from a given +options+ hash.
+
+supports all options except :include
+ignores scope!
+
+class Recipe
+  define_finder :find_all_of_user, :all, :conditions => 'user = :user AND priv < :priv'
+end
+
+  Recipe.find_all_of_user :user => 'martin', :priv => 1
+
+If options[:positional] is not +nil+ or +false+, the created query method
+will use positional paramaters instead of a hash.
+
+Arguments are created in the order of appearance on the parameters passed
+to define_finder. Therefore
+
+   define_finder :find_all_of_user, :all,
+                 :conditions => 'user = :user AND priv < :priv',
+                 :positional => true
+
+will create a query method with parameters +user+ and +priv+, which can be
+called like so:
+
+    Recipes.find_all_of_user('martin', 1)
+
