@@ -1,5 +1,4 @@
-query_builder
-=============
+== Query builder
 
 This plugin enables you to define finder methods that bypass the overhead
 of construct_finder_sql.
