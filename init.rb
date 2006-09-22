@@ -1,24 +1,35 @@
 class ActiveRecord::Base
-  # define a custom finder method
+  # Inside an ActiveRecord model definition,
   #
   #   define_finder query_name, query_type, options_hash
   #
-  # creates a SQL query +query_name+ from a given +options+ hash.
+  # will create a SQL query method called +query_name+ from a given
+  # +options_hash+. +query_type+ can be :first or :all.
   #
-  # supports all options except :include
-  # ignores scope!
+  # The plugin supports all standard options except :include, but ignores
+  # with_scope options. In addition, the :piggy option of the piggy_back
+  # plugin can be used.
   #
-  # class Recipe
-  #   define_finder :find_all_of_user, :all, :conditions => 'user = :user AND priv < :priv'
-  # end
+  # Example:
+  #
+  #   class Recipe
+  #     define_finder :find_all_of_user, :all,
+  #                        :conditions => 'user = :user AND priv < :priv'
+  #   end
+  #
+  # This defines a query method which can be called like so:
   #
   #   Recipe.find_all_of_user :user => 'martin', :priv => 1
   #
-  # If options[:positional] is not +nil+ or +false+, the created query method
-  # will use positional paramaters instead of a hash.
+  # This call is equivalent to
   #
-  # Arguments are created in the order of appearance on the parameters passed
-  # to define_finder. Therefore
+  #   Recipe.find :all, :conditions =>
+  #            ['user = :user AND priv < :priv', {:user => 'martin', :priv => 1}]
+  #
+  # If options[:positional] is not +nil+ or +false+, the created query
+  # method will use positional paramaters instead of a hash. In this case,
+  # arguments are created in the order of appearance on the parameters
+  # passed to define_finder. Therefore
   #
   #    define_finder :find_all_of_user, :all,
   #                  :conditions => 'user = :user AND priv < :priv',
