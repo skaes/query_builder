@@ -72,7 +72,7 @@ class ActiveRecord::Base
 
     private
     def build_query(options)
-      @klass.send(:add_piggy_back!, options) if @klass.respond_to? :piggy_pack!
+      @klass.send(:add_piggy_back!, options) if @klass.respond_to? :add_piggy_back!
       add_select(options)
       add_from(options)
       add_joins(options)
